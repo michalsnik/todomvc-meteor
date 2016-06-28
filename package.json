@@ -1,0 +1,12 @@
+{
+  "name": "todoMVC",
+  "private": true,
+  "scripts": {
+    "start": "meteor run"
+  },
+  "dependencies": {
+    "meteor-node-stubs": "~0.2.0",
+    "todomvc-app-css": "^2.0.6",
+    "todomvc-common": "^1.0.2"
+  }
+}
