@@ -1,22 +1,41 @@
+import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
-import { ReactiveVar } from 'meteor/reactive-var';
+import { ReactiveDict } from 'meteor/reactive-dict';
 
+import { Tasks } from '../api/tasks.js';
+
+import './task.js';
 import './body.html';
 
-// Template.hello.onCreated(function helloOnCreated() {
-//   // counter starts at 0
-//   this.counter = new ReactiveVar(0);
-// });
+Template.body.onCreated(function bodyOnCreated() {
+  this.state = new ReactiveDict();
+  Meteor.subscribe('tasks');
+});
 
-// Template.hello.helpers({
-//   counter() {
-//     return Template.instance().counter.get();
-//   },
-// });
+Template.body.helpers({
+  tasks() {
+    return Tasks.find();
+  },
+  tasksLeftCount() {
+    return Tasks.find({ completed: { $ne: true } }).count();
+  },
+  tasksCompletedCount() {
+    return Tasks.find({ completed: true }).count();
+  },
+});
 
-// Template.hello.events({
-//   'click button'(event, instance) {
-//     // increment the counter when button is clicked
-//     instance.counter.set(instance.counter.get() + 1);
-//   },
-// });
+Template.body.events({
+  'keyup .js-new-todo'(event) {
+    const { keyCode, target } = event;
+    const text = target.value;
+
+    if (keyCode !== 13) return;
+
+    Meteor.call('tasks.insert', text);
+
+    target.value = '';
+  },
+  'click .js-clear-completed'(event) {
+    Meteor.call('tasks.clearCompleted');
+  },
+});

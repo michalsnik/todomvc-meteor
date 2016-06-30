@@ -1,0 +1,10 @@
+<template name="task">
+  <li class="{{#if completed}}completed{{/if}}">
+    <div class="view">
+      <input class="toggle js-toggle-completed" type="checkbox" checked="{{completed}}">
+      <label>{{ text }}</label>
+      <button class="destroy js-delete"></button>
+    </div>
+    <input class="edit" value="{{ text }}">
+  </li>
+</template>
