@@ -25,13 +25,13 @@
       <span class="todo-count"><strong>{{tasksLeftCount}}</strong> items left</span>
       <ul class="filters">
         <li>
-          <a class="selected" href="#/">All</a>
+          <a class="{{isActiveRoute 'Todos.all'}}" href="/">All</a>
         </li>
         <li>
-          <a href="#/active">Active</a>
+          <a class="{{isActiveRoute 'Todos.active'}}" href="/active">Active</a>
         </li>
         <li>
-          <a href="#/completed">Completed</a>
+          <a class="{{isActiveRoute 'Todos.completed'}}" href="/completed">Completed</a>
         </li>
       </ul>
       {{#if tasksCompletedCount}}

@@ -1,6 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
 import { ReactiveDict } from 'meteor/reactive-dict';
+import { FlowRouter } from 'meteor/kadira:flow-router';
 
 import { Tasks } from '../api/tasks.js';
 
@@ -14,7 +15,21 @@ Template.body.onCreated(function bodyOnCreated() {
 
 Template.body.helpers({
   tasks() {
-    return Tasks.find();
+    const todosFilter = FlowRouter.getRouteName();
+    const searchQuery = {};
+
+    switch (todosFilter) {
+      case 'Todos.active':
+        searchQuery.completed = { $ne: true };
+        break;
+      case 'Todos.completed':
+        searchQuery.completed = true;
+        break;
+      default:
+        break;
+    }
+
+    return Tasks.find(searchQuery);
   },
   tasksLeftCount() {
     return Tasks.find({ completed: { $ne: true } }).count();
@@ -35,7 +50,7 @@ Template.body.events({
 
     target.value = '';
   },
-  'click .js-clear-completed'(event) {
+  'click .js-clear-completed'() {
     Meteor.call('tasks.clearCompleted');
   },
 });

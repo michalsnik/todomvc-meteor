@@ -4,4 +4,4 @@ import 'todomvc-app-css/index.css';
 import './main';
 
 // Scripts
-import '../imports/ui/body.js';
+import '../imports/startup/client';
