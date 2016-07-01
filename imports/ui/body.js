@@ -1,6 +1,5 @@
 import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
-import { ReactiveDict } from 'meteor/reactive-dict';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 
 import { Tasks } from '../api/tasks.js';
@@ -9,7 +8,6 @@ import './task.js';
 import './body.html';
 
 Template.body.onCreated(function bodyOnCreated() {
-  this.state = new ReactiveDict();
   Meteor.subscribe('tasks');
 });
 
@@ -29,7 +27,7 @@ Template.body.helpers({
         break;
     }
 
-    return Tasks.find(searchQuery);
+    return Tasks.find(searchQuery, { sort: { createdAt: -1 } });
   },
   tasksLeftCount() {
     return Tasks.find({ completed: { $ne: true } }).count();
