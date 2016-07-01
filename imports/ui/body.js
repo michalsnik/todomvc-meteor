@@ -29,9 +29,11 @@ Template.body.helpers({
 
     return Tasks.find(searchQuery, { sort: { createdAt: -1 } });
   },
+
   tasksLeftCount() {
     return Tasks.find({ completed: { $ne: true } }).count();
   },
+
   tasksCompletedCount() {
     return Tasks.find({ completed: true }).count();
   },
@@ -39,12 +41,11 @@ Template.body.helpers({
 
 Template.body.events({
   'keyup .js-new-todo'(event) {
-    const { keyCode, target } = event;
-    const text = target.value;
+    const { keyCode, target: { value } } = event;
 
     if (keyCode !== 13) return;
 
-    Meteor.call('tasks.insert', text);
+    Meteor.call('tasks.insert', value);
 
     target.value = '';
   },

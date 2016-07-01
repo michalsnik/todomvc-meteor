@@ -2,7 +2,6 @@ import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
 import { ReactiveDict } from 'meteor/reactive-dict';
 import { Tracker } from 'meteor/tracker';
-import { $ } from 'meteor/jquery';
 
 import './task.html';
 
@@ -32,7 +31,6 @@ Template.task.onCreated(function taskOnCreated() {
     this.state.set('isEditing', false);
     this.$('.js-edit-input').val(this.data.text);
   };
-
 });
 
 Template.task.helpers({
@@ -40,32 +38,32 @@ Template.task.helpers({
     const instance = Template.instance();
     return instance.state.get('isEditing');
   },
-})
+});
 
 Template.task.events({
-  'click .js-toggle-completed'(event, instance) {
-    instance.completeTask();
+  'click .js-toggle-completed'(event, templateInstance) {
+    templateInstance.completeTask();
   },
 
-  'dblclick .js-toggle-edit'(event, instance) {
-    instance.startEdit();
+  'dblclick .js-toggle-edit'(event, templateInstance) {
+    templateInstance.startEdit();
   },
 
-  'blur .js-edit-input'(event, instance) {
-    instance.updateTask(event.target.value);
+  'blur .js-edit-input'(event, templateInstance) {
+    templateInstance.updateTask(event.target.value);
   },
 
-  'keyup .js-edit-input'(event, instance) {
+  'keyup .js-edit-input'(event, templateInstance) {
     const { keyCode, target: { value } } = event;
 
     if (keyCode === 13) {
-      instance.updateTask(value);
+      templateInstance.updateTask(value);
     } else if (keyCode === 27) {
-      instance.cancelEdit();
+      templateInstance.cancelEdit();
     }
   },
 
-  'click .js-delete'(event, instance) {
-    instance.removeTask();
+  'click .js-delete'(event, templateInstance) {
+    templateInstance.removeTask();
   },
 });
