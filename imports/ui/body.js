@@ -48,7 +48,12 @@ Template.body.events({
 
     target.value = '';
   },
+
   'click .js-clear-completed'() {
     Meteor.call('tasks.clearCompleted');
+  },
+
+  'click .js-toggle-all'(event) {
+    Meteor.call('tasks.toggleAll', event.target.checked);
   },
 });

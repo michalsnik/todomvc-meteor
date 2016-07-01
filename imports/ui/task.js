@@ -9,6 +9,19 @@ import './task.html';
 Template.task.onCreated(function taskOnCreated() {
   this.state = new ReactiveDict();
 
+  this.completeTask = () => {
+    Meteor.call('tasks.setCompleted', this.data._id, !this.data.completed);
+  };
+
+  this.updateTask = (text) => {
+    this.state.set('isEditing', false);
+    Meteor.call('tasks.update', this.data._id, text);
+  };
+
+  this.removeTask = () => {
+    Meteor.call('tasks.remove', this.data._id);
+  };
+
   this.startEdit = () => {
     this.state.set('isEditing', true);
     Tracker.flush();
@@ -17,12 +30,9 @@ Template.task.onCreated(function taskOnCreated() {
 
   this.cancelEdit = () => {
     this.state.set('isEditing', false);
+    this.$('.js-edit-input').val(this.data.text);
   };
 
-  this.updateTask = (text) => {
-    this.state.set('isEditing', false);
-    Meteor.call('tasks.update', this.data._id, text);
-  };
 });
 
 Template.task.helpers({
@@ -33,8 +43,8 @@ Template.task.helpers({
 })
 
 Template.task.events({
-  'click .js-toggle-completed'() {
-    Meteor.call('tasks.setCompleted', this._id, !this.completed);
+  'click .js-toggle-completed'(event, instance) {
+    instance.completeTask();
   },
 
   'dblclick .js-toggle-edit'(event, instance) {
@@ -55,7 +65,7 @@ Template.task.events({
     }
   },
 
-  'click .js-delete'() {
-    Meteor.call('tasks.remove', this._id);
+  'click .js-delete'(event, instance) {
+    instance.removeTask();
   },
 });

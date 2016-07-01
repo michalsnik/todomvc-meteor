@@ -39,4 +39,9 @@ Meteor.methods({
     check(text, String);
     Tasks.update(taskId, { $set: { text } });
   },
+
+  'tasks.toggleAll'(value) {
+    check(value, Boolean);
+    Tasks.update({}, { $set: { completed: value } }, { multi: true });
+  },
 });
