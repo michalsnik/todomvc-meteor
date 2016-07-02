@@ -1,5 +1,4 @@
 {
-  "name": "todoMVC",
   "private": true,
   "scripts": {
     "start": "meteor run",
