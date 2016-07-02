@@ -7,7 +7,7 @@
       <input class="new-todo js-new-todo" placeholder="What needs to be done?" autofocus>
     </header>
 
-    {{#if tasks}}
+    {{#if tasksCount}}
     <section class="main">
       <input class="toggle-all js-toggle-all" type="checkbox">
       <label for="toggle-all">Mark all as complete</label>
@@ -17,9 +17,7 @@
         {{/each}}
       </ul>
     </section>
-    {{/if}}
 
-    {{#if tasks}}
     <footer class="footer">
       <span class="todo-count"><strong>{{tasksLeftCount}}</strong> items left</span>
       <ul class="filters">

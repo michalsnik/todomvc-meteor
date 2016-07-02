@@ -3,7 +3,11 @@ import { Template } from 'meteor/templating';
 import { ReactiveDict } from 'meteor/reactive-dict';
 import { Tracker } from 'meteor/tracker';
 
+import keys from './lib/keys.js';
+
 import './task.html';
+
+const { ENTER_KEY, ESCAPE_KEY } = keys;
 
 Template.task.onCreated(function taskOnCreated() {
   this.state = new ReactiveDict();
@@ -14,7 +18,12 @@ Template.task.onCreated(function taskOnCreated() {
 
   this.updateTask = (text) => {
     this.state.set('isEditing', false);
-    Meteor.call('tasks.update', this.data._id, text);
+
+    if (text === '') {
+      this.removeTask();
+    } else {
+      Meteor.call('tasks.update', this.data._id, text);
+    }
   };
 
   this.removeTask = () => {
@@ -56,9 +65,9 @@ Template.task.events({
   'keyup .js-edit-input'(event, templateInstance) {
     const { keyCode, target: { value } } = event;
 
-    if (keyCode === 13) {
+    if (keyCode === ENTER_KEY) {
       templateInstance.updateTask(value);
-    } else if (keyCode === 27) {
+    } else if (keyCode === ESCAPE_KEY) {
       templateInstance.cancelEdit();
     }
   },

@@ -4,8 +4,12 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 
 import { Tasks } from '../api/tasks.js';
 
+import keys from './lib/keys.js';
+
 import './task.js';
 import './body.html';
+
+const { ENTER_KEY, ESCAPE_KEY } = keys;
 
 Template.body.onCreated(function bodyOnCreated() {
   Meteor.subscribe('tasks');
@@ -37,13 +41,17 @@ Template.body.helpers({
   tasksCompletedCount() {
     return Tasks.find({ completed: true }).count();
   },
+
+  tasksCount() {
+    return Tasks.find().count();
+  },
 });
 
 Template.body.events({
   'keyup .js-new-todo'(event) {
-    const { keyCode, target: { value } } = event;
+    const { keyCode, target, target: { value } } = event;
 
-    if (keyCode !== 13) return;
+    if (keyCode !== ENTER_KEY) return;
 
     Meteor.call('tasks.insert', value);
 
