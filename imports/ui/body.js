@@ -1,3 +1,5 @@
+'use strict';
+
 import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
 import { FlowRouter } from 'meteor/kadira:flow-router';
@@ -9,62 +11,64 @@ import keys from './lib/keys.js';
 import './task.js';
 import './body.html';
 
-const { ENTER_KEY, ESCAPE_KEY } = keys;
+const { ENTER_KEY } = keys;
 
 Template.body.onCreated(function bodyOnCreated() {
-  Meteor.subscribe('tasks');
+	Meteor.subscribe('tasks');
 });
 
 Template.body.helpers({
-  tasks() {
-    const todosFilter = FlowRouter.getRouteName();
-    const searchQuery = {};
+	tasks() {
+		const todosFilter = FlowRouter.getRouteName();
+		const searchQuery = {};
 
-    switch (todosFilter) {
-      case 'Todos.active':
-        searchQuery.completed = { $ne: true };
-        break;
-      case 'Todos.completed':
-        searchQuery.completed = true;
-        break;
-      default:
-        break;
-    }
+		switch (todosFilter) {
+			case 'Todos.active':
+				searchQuery.completed = { $ne: true };
+				break;
+			case 'Todos.completed':
+				searchQuery.completed = true;
+				break;
+			default:
+				break;
+		}
 
-    return Tasks.find(searchQuery, { sort: { createdAt: -1 } });
-  },
+		return Tasks.find(searchQuery, { sort: { createdAt: -1 } });
+	},
 
-  tasksLeftCount() {
-    return Tasks.find({ completed: { $ne: true } }).count();
-  },
+	tasksLeftCount() {
+		return Tasks.find({ completed: { $ne: true } }).count();
+	},
 
-  tasksCompletedCount() {
-    return Tasks.find({ completed: true }).count();
-  },
+	tasksCompletedCount() {
+		return Tasks.find({ completed: true }).count();
+	},
 
-  tasksCount() {
-    return Tasks.find().count();
-  },
+	tasksCount() {
+		return Tasks.find().count();
+	}
 });
 
 Template.body.events({
-  'keyup .js-new-todo'(event) {
-    const { keyCode, target, target: { value } } = event;
+	'keyup .js-new-todo'(event) {
+		const { keyCode, target, target: { value } } = event;
 
-    if (keyCode !== ENTER_KEY) return;
+		if (keyCode !== ENTER_KEY) {
+			return;
+		}
 
-    if (value.length) {
-      Meteor.call('tasks.insert', value);
-    }
+		if (value.length) {
+			Meteor.call('tasks.insert', value);
+		}
 
-    target.value = '';
-  },
+		target.value = '';
+	},
 
-  'click .js-clear-completed'() {
-    Meteor.call('tasks.clearCompleted');
-  },
+	'click .js-clear-completed'() {
+		Meteor.call('tasks.clearCompleted');
+	},
 
-  'click .js-toggle-all'(event) {
-    Meteor.call('tasks.toggleAll', event.target.checked);
-  },
+	'click .js-toggle-all'(event) {
+		Meteor.call('tasks.toggleAll', event.target.checked);
+	}
 });

@@ -1,4 +1,4 @@
 export default {
-  ENTER_KEY: 13,
-  ESCAPE_KEY: 27,
+	ENTER_KEY: 13,
+	ESCAPE_KEY: 27
 };
