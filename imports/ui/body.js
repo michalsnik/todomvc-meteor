@@ -53,7 +53,9 @@ Template.body.events({
 
     if (keyCode !== ENTER_KEY) return;
 
-    Meteor.call('tasks.insert', value);
+    if (value.length) {
+      Meteor.call('tasks.insert', value);
+    }
 
     target.value = '';
   },
